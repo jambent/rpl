@@ -12,5 +12,11 @@ fn main() {
     io::stdin()
     .read_line(&mut input_operation_number)
     .expect("Input not recognised");
+
+    let input_operation_integer: Result<i32,_> = input_operation_number.trim().parse();
+    match input_operation_integer {
+        Ok(num) => println!("{num}"),
+        Err(_e) => println!("Did not recognise input as a number")
+    };
     
 }
