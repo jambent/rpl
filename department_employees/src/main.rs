@@ -1,5 +1,5 @@
 use std::io;
-use std::collections::HashMap;
+use std::collections::{HashMap,HashSet};
 
 
 fn main() {
@@ -41,7 +41,6 @@ fn main() {
                                         .entry(department)
                                         .or_insert_with(Vec::new)
                                         .push(employee);
-                                    //println!("{:?}",employee_department_hashmap);
                                 }
                             }
                         }
@@ -50,10 +49,41 @@ fn main() {
                         }
                     }
                 else if num == 2 {
-                    println!("{}",&num);
+                    println!("Enter department name:");
+                    let mut department_input = String::new();
+                    io::stdin()
+                        .read_line(&mut department_input)
+                        .expect("Department input value not valid");
+                    // Always need to trim std input before use
+                    let trimmed_dept = department_input.trim(); 
+                    if let Some(department_employees) = employee_department_hashmap
+                                                        .get(trimmed_dept){
+                        println!("Employees in {trimmed_dept}:");
+                        let mut cloned_employees = department_employees.clone();
+                        cloned_employees.sort();
+                        for employee in cloned_employees {
+                            println!("{}",employee);
+                        }
+                    }
                 }
                 else if num == 3 {
-                    println!("{}",&num);
+                    let department_keys = employee_department_hashmap.keys();
+                    let mut all_employees: Vec<String> = Vec::new();
+                    for department in department_keys {
+                        let department_employees = employee_department_hashmap.get(department).unwrap();
+                        for employee in department_employees {
+                            all_employees.push(employee.to_string());
+                        }
+                    }
+                    // Get set of unique employees, output back to vector
+                    //  and sort
+                    let all_employees_set: HashSet<_> = all_employees.into_iter().collect();
+                    let mut unique_employees: Vec<_> = all_employees_set.into_iter().collect();
+                    unique_employees.sort();
+                    println!("List of all company employees:");
+                    for employee in unique_employees {
+                        println!("{employee}");
+                    }
                 }
                 else if num == 4 {
                     break;
